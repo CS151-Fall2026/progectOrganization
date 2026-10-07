@@ -1,32 +1,57 @@
-#Macros
+-include config.mk
 
 CC = g++
-FLAGS = -Wall -std=c++17 
-LINKS = -lsfml-graphics -lsfml-window -lsfml-system 
-game: main.o game.o welcome.o play.o cherry.o button.o results.o
-	$(CC) $(FLAGS) $^ -o $@ $(LINKS)
+CFLAGS = -Wall -std=c++17 -I$(SFML_DIR)/include #-DSFML_STATIC 
+LFLAGS = -L$(SFML_DIR)/lib
+# LIBS = -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lopengl32 -lfreetype -lwinmm -lgdi32 -lsfml-main -mwindows
+LIBS = -lsfml-graphics -lsfml-window -lsfml-system 
 
-main.o: main.cpp game.h
-	$(CC) $(FLAGS) -c $<
+# Detect operating system
+ifeq ($(OS),Windows_NT)
+    MKDIR = if not exist obj mkdir obj
+    EXE = .exe
+    RM = del /Q
+    CLEAN_OBJECTS = $(subst /,\,$(OBJECTS))
+else
+    MKDIR = mkdir -p obj
+    EXE =
+    RM = rm -f
+    CLEAN_OBJECTS = $(OBJECTS)
+endif
 
-game.o: game.cpp game.h states.h welcome.h play.h results.h
-	$(CC) $(FLAGS) -c $<
+#Find all files in the src directory whose names end in .cpp.
+SOURCES = $(wildcard src/*.cpp)
+#for each cpp file in the src directory, creat coresponding file in obj directory
+OBJECTS = $(patsubst src/%.cpp,obj/%.o,$(SOURCES))
 
-welcome.o: welcome.cpp welcome.h states.h button.h
-	$(CC) $(FLAGS) -c $<
+obj/%.o: src/%.cpp | obj
+	$(CC) $(CFLAGS) -c $< -o $@
 
-play.o: play.cpp play.h states.h button.h cherry.h
-	$(CC) $(FLAGS) -c $<
+game: obj/main.o obj/game.o obj/welcome.o obj/play.o obj/cherry.o obj/button.o obj/results.o | obj
+	$(CC) $(LFLAGS) $^ -o $@ $(LIBS)
 
-cherry.o: cherry.cpp cherry.h 
-	$(CC) $(FLAGS) -c $<
+obj/main.o: include/game.h
 
-button.o: button.cpp button.h
-	$(CC) $(FLAGS) -c $<
+obj/game.o: include/game.h include/states.h include/welcome.h include/play.h include/results.h
 
-results.o: results.cpp results.h states.h button.h
-	$(CC) $(FLAGS) -c $<
+obj/welcome.o: include/welcome.h include/states.h include/button.h
+
+obj/play.o: include/play.h include/states.h include/button.h include/cherry.h
+
+obj/cherry.o: include/cherry.h 
+
+obj/button.o: include/button.h
+
+obj/results.o: include/results.h include/states.h include/button.h
+
+obj:
+	$(MKDIR)
+
+
+run: game$(EXE)
+	.\game$(EXE)
 
 clean:
-	rm -f game *.o
+	$(RM) $(CLEAN_OBJECTS) $(TARGET)$(EXE)
+
 

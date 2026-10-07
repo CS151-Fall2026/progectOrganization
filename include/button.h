@@ -1,9 +1,3 @@
-/**
- * @file button.h
- * @author Ekaterina Miller
- * @brief Defenition file for the Button clas
- * @aknolegment https://code.markrichards.ninja/sfml/how-to-create-simple-buttons-for-your-sfml-game
- */
 #ifndef BUTTON_H
 #define BUTTON_H
 #include <SFML/Graphics.hpp>
@@ -17,7 +11,7 @@ class Button: public sf::Drawable
 public:
     //Default constructor that loads texture from file “button.png” and font from “college.ttf” file.
     //set texture for mButton, set the origin to the middle of the button (texture), 
-    //set color to White, position to {300,100}, set state to normal, and scale to 100%
+    //set color to White, position to {300,100}, set state to normal, size to 300 by 100
     //set font for the text, set the size of the text to the half of Button size, set the origin to the middle of the text 
     //and set position at the middle of the button, assign “Push me!” as a string of the button
     Button();
@@ -31,31 +25,31 @@ public:
     //change button color to color (what else needs to be changed?)
     void setColor(sf::Color btnColor);
     //change button label to s (what else needs to be changed?)
-    void setText(std::string s);
+    void setText(const std::string& s);
     void setColorTextNormal(sf::Color textNormalColor){mTextNormal = textNormalColor;};
     void setColorTextHover(sf::Color textHoverColor){mTextHover = textHoverColor;};
 
-    sf::Vector2f getPosition(){return mPosition;};
-    sf::Vector2f getDimensions(){return sf::Vector2f(mButton.getGlobalBounds().width, mButton.getGlobalBounds().height);};
-    sf::Uint32 getState(){return mBtnState;};
+    sf::Vector2f getPosition() const {return mPosition;};
+    sf::Vector2f getDimensions()const {return mButton.getSize();};
+    state getState()const {return mBtnState;};
 
     //This function update the button state and/or look
-    bool handleInput(sf::Event& e, sf::RenderWindow& window);
+    bool handleInput(const sf::Event& e, sf::RenderWindow& window);
     void update();
     virtual void draw(sf::RenderTarget& target,sf::RenderStates states) const;
 
 private:
-    sf::Sprite mButton;
+    sf::RectangleShape mButton;
     sf::Texture mTexture;
     sf::Color mButtonColor;
     sf::Vector2f mPosition;
-    sf::Uint32 mBtnState;
+    state mBtnState;
     
     //text
     sf::Text mText;
     sf::Font mFont;
-    sf::Color mTextNormal;
-    sf::Color mTextHover;
+    sf::Color mTextNormal {sf::Color::Green};
+    sf::Color mTextHover {sf::Color::Red};
 
 };
 #endif

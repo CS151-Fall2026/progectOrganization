@@ -1,20 +1,25 @@
-#include "cherry.h"
+#include "../include/cherry.h"
+#include <iostream>
 /**
  * @brief Construct a new Cherry:: Cherry object
  * 
  */
 Cherry::Cherry() 
 {
-    mTextureTile.loadFromFile("rpg_textures.png");
+    if (!mTextureTile.loadFromFile("assets/rpg_textures.png"))
+    {
+        std::cerr<<"Error opening file\n";
+        exit(1);
+    }
     mCherryPlant.setRadius(31);
     mCherryPlant.setTexture(&mTextureTile);
-    mCherryPlant.setTextureRect(sf::IntRect(64, 32, 62, 62));
-    mCherryPlant.setOrigin(62.f / 2.f, 62.f / 2.f);
+    mCherryPlant.setTextureRect(sf::IntRect({64, 32}, {62, 62}));
+    mCherryPlant.setOrigin({62.f / 2.f, 62.f / 2.f});
 
-    mIncrement = sf::Vector2f(4.f, 4.f);
+    mIncrement = sf::Vector2f(120.f, 120.f);
 
-    mPosition.x=0;
-    mPosition.y=0;
+    mPosition ={61, 51};
+    mCherryPlant.setPosition(mPosition);
     mSize.x=0;
     mSize.y = 0;
 }
@@ -44,7 +49,7 @@ void Cherry::setBondary(int xPosition, int yPosition, int width, int hight)
  * @param elapsedTime time since last update
  * @param window 
  */
-void Cherry::update(double elapsedTime, sf::RenderWindow& window)
+void Cherry::update(float elapsedTime, sf::RenderWindow& window)
 {
     moveCherry(elapsedTime, window);
 }
@@ -55,7 +60,7 @@ void Cherry::update(double elapsedTime, sf::RenderWindow& window)
  * @param elapsedTime time since last update
  * @param window 
  */
-void Cherry::moveCherry(double elapsedTime, sf::RenderWindow& window)
+void Cherry::moveCherry(float elapsedTime, sf::RenderWindow& window)
 {
     if (mSize.x == 0 || mSize.y == 0){
         mSize.x = window.getSize().x;
@@ -64,7 +69,7 @@ void Cherry::moveCherry(double elapsedTime, sf::RenderWindow& window)
         
     int cherryX = 62;
     int cherryY = 62;
-    double speed = 60;
+  
 
     if ((mCherryPlant.getPosition().x + (cherryX / 2) > mPosition.x + mSize.x && mIncrement.x > 0) ||
         (mCherryPlant.getPosition().x - (cherryX / 2) < mPosition.x && mIncrement.x < 0))
@@ -80,9 +85,8 @@ void Cherry::moveCherry(double elapsedTime, sf::RenderWindow& window)
         mIncrement.y = -mIncrement.y;
     }
 
-    mCherryPlant.setPosition(
-        mCherryPlant.getPosition().x + mIncrement.x*speed*elapsedTime,
-        mCherryPlant.getPosition().y + mIncrement.y*speed*elapsedTime);
+    mCherryPlant.setPosition({mCherryPlant.getPosition().x + mIncrement.x*elapsedTime,
+        mCherryPlant.getPosition().y + mIncrement.y*elapsedTime});
 }
 
 /**

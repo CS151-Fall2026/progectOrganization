@@ -8,7 +8,7 @@ class Play
 {
 public:
     Play();
-    State handleInput(sf::Event& e,  sf::RenderWindow& window);
+    State handleInput(const sf::Event& e,  sf::RenderWindow& window);
     void update(double elapsedTime, sf::RenderWindow& window);
     void render(sf::RenderWindow& window);
 

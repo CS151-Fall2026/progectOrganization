@@ -1,8 +1,8 @@
 
-#include "welcome.h"
-Welcome::Welcome()
+#include "../include/welcome.h"
+Welcome::Welcome():mRules(mFont), mHeader(mFont)
 {
-    if (!mFont.loadFromFile("college.ttf"))
+    if (!mFont.openFromFile("assets/college.ttf"))
     {
         std::cout<<"Error opening file\n";
         exit(2);
@@ -26,7 +26,7 @@ Welcome::Welcome()
     mStart.setColorTextNormal(sf::Color::Blue);
     //mStart.setColor(sf::Color(255,255,0));
 }
-State Welcome::handleInput(sf::Event& e, sf::RenderWindow& window)
+State Welcome::handleInput(const sf::Event& e, sf::RenderWindow& window)
 {
     if (mStart.handleInput(e, window)){
         return game;

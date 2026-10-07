@@ -1,4 +1,4 @@
-#include "play.h"
+#include "../include/play.h"
 Play::Play()
 {
     mFrame.setSize(sf::Vector2f(580, 400));
@@ -29,7 +29,7 @@ Play::Play()
     mExit.setColorTextNormal(sf::Color::Blue);
 }
 
-State Play::handleInput(sf::Event& e,  sf::RenderWindow& window)
+State Play::handleInput(const sf::Event& e,  sf::RenderWindow& window)
 {
     if (mRules.handleInput(e, window)){
         return welcome;

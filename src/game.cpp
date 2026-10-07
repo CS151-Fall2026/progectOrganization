@@ -1,4 +1,4 @@
-#include "game.h"
+#include "../include/game.h"
 
 Game::Game()
 {
@@ -9,10 +9,10 @@ Game::Game()
 //Handle events from input devices and the window
 void Game::handleInput(sf::RenderWindow& window)
 {
-    sf::Event event;
-    while(window.pollEvent(event))
+
+    while(const std::optional<sf::Event> event =window.pollEvent())
     {
-        if(event.type == sf::Event::Closed)
+        if(event->is<sf::Event::Closed>())
         {
             // Close window button clicked.
             window.close();
@@ -21,15 +21,15 @@ void Game::handleInput(sf::RenderWindow& window)
         {
         case welcome:
 //std::cout<<"Game::handleInput case welcome" <<std::endl;
-            mGameState = mWelcomeScreen.handleInput(event, window);
+            mGameState = mWelcomeScreen.handleInput(*event, window);
             break;
         case game:
 //std::cout<<"Game::handleInput case game" <<std::endl;
-            mGameState = mGame.handleInput(event, window);
+            mGameState = mGame.handleInput(*event, window);
             break;
         case results:
 //std::cout<<"Game::handleInput case result" <<std::endl;
-            mGameState=mResults.handleInput(event, window);
+            mGameState=mResults.handleInput(*event, window);
             break;
         case quit:
 //std::cout<<"Game::handleInput case quit" <<std::endl;

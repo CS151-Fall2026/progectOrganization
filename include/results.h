@@ -7,7 +7,7 @@ class Results
 {
 public:
     Results();
-    State handleInput(sf::Event& e, sf::RenderWindow& window);
+    State handleInput(const sf::Event& e, sf::RenderWindow& window);
     void update();
     void render(sf::RenderWindow& window);
 

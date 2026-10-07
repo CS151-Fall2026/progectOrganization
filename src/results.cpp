@@ -1,7 +1,7 @@
-#include "results.h"
-Results::Results()
+#include "../include/results.h"
+Results::Results():mResults(mFont)
 {
-    if (!mFont.loadFromFile("college.ttf"))
+    if (!mFont.openFromFile("assets/college.ttf"))
     {
         std::cout<<"Error opening file\n";
         exit(2);
@@ -29,7 +29,7 @@ Results::Results()
     mLeave.setColorTextNormal(sf::Color::Blue);
 
 }
-State Results::handleInput(sf::Event& e,  sf::RenderWindow& window)
+State Results::handleInput(const sf::Event& e,  sf::RenderWindow& window)
 {
     if (mPlayAgain.handleInput(e, window)){
         return game;
